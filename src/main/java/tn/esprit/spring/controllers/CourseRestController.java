@@ -40,6 +40,7 @@ public class CourseRestController {
     @GetMapping("/get/{id-course}")
     public Course getById(@PathVariable("id-course") Long numCourse){
         return courseServices.retrieveCourse(numCourse);
+        //tt
     }
 
 }
