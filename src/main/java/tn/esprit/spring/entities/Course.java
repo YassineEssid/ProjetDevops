@@ -12,8 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-@Getter
-@Setter
+
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level=AccessLevel.PRIVATE)
@@ -35,4 +34,59 @@ public class Course implements Serializable {
 	@OneToMany(mappedBy= "course")
 	Set<Registration> registrations;
 
+	public Long getNumCourse() {
+		return numCourse;
+	}
+
+	public void setNumCourse(Long numCourse) {
+		this.numCourse = numCourse;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public TypeCourse getTypeCourse() {
+		return typeCourse;
+	}
+
+	public void setTypeCourse(TypeCourse typeCourse) {
+		this.typeCourse = typeCourse;
+	}
+
+	public Float getPrice() {
+		return price;
+	}
+
+	public void setPrice(Float price) {
+		this.price = price;
+	}
+
+	public Support getSupport() {
+		return support;
+	}
+
+	public void setSupport(Support support) {
+		this.support = support;
+	}
+
+	public int getTimeSlot() {
+		return timeSlot;
+	}
+
+	public void setTimeSlot(int timeSlot) {
+		this.timeSlot = timeSlot;
+	}
+
+	public Set<Registration> getRegistrations() {
+		return registrations;
+	}
+
+	public void setRegistrations(Set<Registration> registrations) {
+		this.registrations = registrations;
+	}
 }

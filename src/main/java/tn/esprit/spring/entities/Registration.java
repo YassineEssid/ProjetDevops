@@ -16,9 +16,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-@Getter
-@Setter
 @ToString
+
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level=AccessLevel.PRIVATE)
@@ -36,4 +35,38 @@ public class Registration implements Serializable {
 	@JsonIgnore
 	@ManyToOne
 	Course course;
+
+	public Long getNumRegistration() {
+		return numRegistration;
+	}
+
+	public void setNumRegistration(Long numRegistration) {
+		this.numRegistration = numRegistration;
+	}
+
+	public int getNumWeek() {
+		return numWeek;
+	}
+
+	public void setNumWeek(int numWeek) {
+		this.numWeek = numWeek;
+	}
+
+	public Skier getSkier() {
+		return skier;
+	}
+
+	public void setSkier(Skier skier) {
+		this.skier = skier;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+
+
 }

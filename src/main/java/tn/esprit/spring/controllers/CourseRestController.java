@@ -3,6 +3,7 @@ package tn.esprit.spring.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.spring.entities.Course;
 import tn.esprit.spring.entities.TypeCourse;
@@ -15,8 +16,8 @@ import java.util.List;
 @RequestMapping("/course")
 @RequiredArgsConstructor
 public class CourseRestController {
-    
-    private final ICourseServices courseServices;
+@Autowired
+    private   ICourseServices courseServices;
 
     @Operation(description = "Add Course")
     @PostMapping("/add")

@@ -3,6 +3,7 @@ package tn.esprit.spring.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.spring.entities.Skier;
 import tn.esprit.spring.entities.TypeSubscription;
@@ -15,8 +16,8 @@ import java.util.List;
 @RequestMapping("/skier")
 @RequiredArgsConstructor
 public class SkierRestController {
-
-    private final ISkierServices skierServices;
+@Autowired
+    private  ISkierServices skierServices;
 
     @Operation(description = "Add Skier")
     @PostMapping("/add")

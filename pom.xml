@@ -20,8 +20,9 @@
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>17</java.version> <!-- Updated to match your JDK -->
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
+		<jacoco.version>0.8.11</jacoco.version> <!-- Added JaCoCo version -->
 	</properties>
 
 	<dependencies>
@@ -47,6 +48,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
+			<version>1.18.30</version> <!-- Explicit version -->
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -63,20 +65,21 @@
 
 	<build>
 		<plugins>
-			<!-- JaCoCo Plugin -->
+			<!-- Simplified JaCoCo Configuration -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.7</version>
+				<version>${jacoco.version}</version>
 				<executions>
 					<execution>
+						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
 					<execution>
 						<id>report</id>
-						<phase>prepare-package</phase>
+						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
@@ -84,7 +87,6 @@
 				</executions>
 			</plugin>
 
-			<!-- Spring Boot Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

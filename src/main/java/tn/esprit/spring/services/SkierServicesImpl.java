@@ -1,6 +1,7 @@
 package tn.esprit.spring.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tn.esprit.spring.entities.*;
 import tn.esprit.spring.repositories.*;
@@ -12,15 +13,15 @@ import java.util.Set;
 @AllArgsConstructor
 @Service
 public class SkierServicesImpl implements ISkierServices {
-
+@Autowired
     private ISkierRepository skierRepository;
-
+@Autowired
     private IPisteRepository pisteRepository;
-
+@Autowired
     private ICourseRepository courseRepository;
-
+@Autowired
     private IRegistrationRepository registrationRepository;
-
+@Autowired
     private ISubscriptionRepository subscriptionRepository;
 
 

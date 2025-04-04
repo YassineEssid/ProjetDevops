@@ -1,7 +1,9 @@
 package tn.esprit.spring.services;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tn.esprit.spring.entities.Skier;
@@ -14,14 +16,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-@Slf4j
 @AllArgsConstructor
 @Service
 public class SubscriptionServicesImpl implements ISubscriptionServices{
-
+@Autowired
     private ISubscriptionRepository subscriptionRepository;
-
+@Autowired
     private ISkierRepository skierRepository;
+    private static final Logger log = LoggerFactory.getLogger(RegistrationServicesImpl.class);
 
     @Override
     public Subscription addSubscription(Subscription subscription) {

@@ -3,6 +3,7 @@ package tn.esprit.spring.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.spring.entities.Subscription;
 import tn.esprit.spring.entities.TypeSubscription;
@@ -17,8 +18,8 @@ import java.util.Set;
 @RequestMapping("/subscription")
 @RequiredArgsConstructor
 public class SubscriptionRestController {
-
-    private final ISubscriptionServices subscriptionServices;
+@Autowired
+    private  ISubscriptionServices subscriptionServices;
 
     @Operation(description = "Add Subscription ")
     @PostMapping("/add")

@@ -3,6 +3,7 @@ package tn.esprit.spring.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.spring.entities.Piste;
 import tn.esprit.spring.services.IPisteServices;
@@ -14,8 +15,8 @@ import java.util.List;
 @RequestMapping("/piste")
 @RequiredArgsConstructor
 public class PisteRestController {
-
-    private final IPisteServices pisteServices;
+@Autowired
+    private  IPisteServices pisteServices;
 
     @Operation(description = "Add Piste")
     @PostMapping("/add")
