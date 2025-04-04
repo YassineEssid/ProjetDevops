@@ -87,20 +87,19 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Byte Buddy (required for Mockito) -->
+		<!-- Byte Buddy (required for Hibernate at runtime) -->
 		<dependency>
 			<groupId>net.bytebuddy</groupId>
 			<artifactId>byte-buddy</artifactId>
 			<version>1.14.6</version>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>net.bytebuddy</groupId>
 			<artifactId>byte-buddy-agent</artifactId>
 			<version>1.14.6</version>
-			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>
