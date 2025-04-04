@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -39,6 +40,7 @@ class InstructorServicesImplTest {
         instructor.setFirstName("John");
         instructor.setLastName("Doe");
         instructor.setDateOfHire(LocalDate.now());
+        instructor.setCourses(new HashSet<>());
 
         course = new Course();
         course.setNumCourse(1L);
@@ -51,20 +53,20 @@ class InstructorServicesImplTest {
 
         Instructor savedInstructor = instructorServices.addInstructor(instructor);
 
-        assertNotNull(savedInstructor);
-        assertEquals("John", savedInstructor.getFirstName());
+        assertNotNull(savedInstructor, "Saved instructor should not be null");
+        assertEquals("John", savedInstructor.getFirstName(), "First name should match");
         verify(instructorRepository, times(1)).save(instructor);
     }
 
     @Test
     void testRetrieveAllInstructors() {
-        List<Instructor> instructors = Arrays.asList(instructor);
+        List<Instructor> instructors = Collections.singletonList(instructor);
         when(instructorRepository.findAll()).thenReturn(instructors);
 
         List<Instructor> result = instructorServices.retrieveAllInstructors();
 
-        assertEquals(1, result.size());
-        assertEquals("John", result.get(0).getFirstName());
+        assertEquals(1, result.size(), "Should return one instructor");
+        assertEquals("John", result.get(0).getFirstName(), "First name should match");
         verify(instructorRepository, times(1)).findAll();
     }
 
@@ -73,14 +75,15 @@ class InstructorServicesImplTest {
         Instructor updatedInfo = new Instructor();
         updatedInfo.setNumInstructor(1L);
         updatedInfo.setFirstName("UpdatedName");
+        updatedInfo.setLastName("Doe");
+        updatedInfo.setDateOfHire(LocalDate.now());
 
-        when(instructorRepository.findById(1L)).thenReturn(Optional.of(instructor));
         when(instructorRepository.save(any(Instructor.class))).thenReturn(updatedInfo);
 
         Instructor updatedInstructor = instructorServices.updateInstructor(updatedInfo);
 
-        assertNotNull(updatedInstructor);
-        assertEquals("UpdatedName", updatedInstructor.getFirstName());
+        assertNotNull(updatedInstructor, "Updated instructor should not be null");
+        assertEquals("UpdatedName", updatedInstructor.getFirstName(), "First name should be updated");
         verify(instructorRepository, times(1)).save(updatedInfo);
     }
 
@@ -90,8 +93,8 @@ class InstructorServicesImplTest {
 
         Instructor foundInstructor = instructorServices.retrieveInstructor(1L);
 
-        assertNotNull(foundInstructor);
-        assertEquals(1L, foundInstructor.getNumInstructor());
+        assertNotNull(foundInstructor, "Instructor should be found");
+        assertEquals(1L, foundInstructor.getNumInstructor(), "ID should match");
         verify(instructorRepository, times(1)).findById(1L);
     }
 
@@ -101,7 +104,7 @@ class InstructorServicesImplTest {
 
         Instructor foundInstructor = instructorServices.retrieveInstructor(1L);
 
-        assertNull(foundInstructor);
+        assertNull(foundInstructor, "Should return null when not found");
         verify(instructorRepository, times(1)).findById(1L);
     }
 
@@ -112,9 +115,10 @@ class InstructorServicesImplTest {
 
         Instructor result = instructorServices.addInstructorAndAssignToCourse(instructor, 1L);
 
-        assertNotNull(result);
-        assertNotNull(result.getCourses());
-        assertEquals(1, result.getCourses().size());
+        assertNotNull(result, "Result should not be null");
+        assertNotNull(result.getCourses(), "Courses set should not be null");
+        assertEquals(1, result.getCourses().size(), "Should have one course assigned");
+        assertTrue(result.getCourses().contains(course), "Course should be assigned");
         verify(courseRepository, times(1)).findById(1L);
         verify(instructorRepository, times(1)).save(instructor);
     }
@@ -125,9 +129,9 @@ class InstructorServicesImplTest {
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
             instructorServices.addInstructorAndAssignToCourse(instructor, 1L);
-        });
+        }, "Should throw exception when course not found");
 
-        assertTrue(exception.getMessage().contains("Course not found"));
+        assertEquals("Course not found", exception.getMessage(), "Exception message should match");
         verify(courseRepository, times(1)).findById(1L);
         verify(instructorRepository, never()).save(any());
     }
