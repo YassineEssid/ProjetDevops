@@ -26,7 +26,7 @@
 	</properties>
 
 	<dependencies>
-		<!-- Your existing dependencies remain unchanged -->
+		<!-- Spring Boot dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -57,47 +57,12 @@
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.6.12</version>
 		</dependency>
+
+		<!-- Test dependency with scope 'test' -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-
-		<!-- JUnit 5 for tests -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.8.2</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Mockito Core for creating mocks -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>5.5.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Mockito JUnit 5 Extension for JUnit 5 integration -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-junit-jupiter</artifactId>
-			<version>5.5.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Byte Buddy (required for Hibernate at runtime) -->
-		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy</artifactId>
-			<version>1.14.6</version>
-		</dependency>
-
-		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy-agent</artifactId>
-			<version>1.14.6</version>
 		</dependency>
 
 	</dependencies>
@@ -148,4 +113,5 @@
 			<url>http://localhost:8081/repository/maven-releases/</url>
 		</repository>
 	</distributionManagement>
+
 </project>
