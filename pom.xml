@@ -25,6 +25,16 @@
 		<jacoco.version>0.8.11</jacoco.version>
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.bytebuddy</groupId>
+				<artifactId>byte-buddy</artifactId>
+				<version>1.10.22</version> <!-- Try this or adjust the version -->
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<!-- Spring Boot dependencies -->
 		<dependency>
@@ -65,24 +75,19 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- byte-buddy dependencies -->
 		<dependency>
 			<groupId>net.bytebuddy</groupId>
 			<artifactId>byte-buddy</artifactId>
-			<version>1.12.23</version> <!-- Updated version -->
+			<version>1.10.22</version> <!-- Updated version -->
 		</dependency>
 
+		<!-- byte-buddy-agent dependency (optional, if needed) -->
 		<dependency>
 			<groupId>net.bytebuddy</groupId>
 			<artifactId>byte-buddy-agent</artifactId>
-			<version>1.12.23</version> <!-- Updated version -->
+			<version>1.10.22</version> <!-- Updated version -->
 		</dependency>
-
-
-
-
-
-
-
 	</dependencies>
 
 	<build>
