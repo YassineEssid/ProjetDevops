@@ -14,9 +14,9 @@
 	</parent>
 
 	<groupId>tn.esprit.spring</groupId>
-	<artifactId>4TWIN4-gestion-station-ski</artifactId>
+	<artifactId>4TWIN3-gestion-station-ski</artifactId>
 	<version>1.0</version>
-	<name>4TWIN4-gestion-station-ski</name>
+	<name>4TWIN3-gestion-station-ski</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
