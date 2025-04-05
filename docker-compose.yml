@@ -15,7 +15,7 @@ services:
   station-ski-app:
     depends_on:
       - mysqldb
-    image: ihebmsaed/4twin4-gestion-station-ski:latest
+    image: ihebmsaed/4twin3-gestion-station-ski:latest
     restart: on-failure
     ports:
       - 8089:8089
