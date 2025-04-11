@@ -2,45 +2,40 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven' // Assurez-vous que Maven est installé dans Jenkins
+        maven 'Maven' // Vérifier le nom dans "Global Tool Configuration"
     }
 
     environment {
-        SONAR_SCANNER = tool 'SonarQubeScanner' // Nom de l'outil configuré dans Jenkins
+        SONAR_SCANNER = tool 'SonarQubeScanner'
+        // Configurer le token dans les credentials Jenkins (ex: SONAR_TOKEN)
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'feat/helmi', url: 'https://github.com/YassineEssid/ProjetDevops.git'
+                git branch: 'feat/helmi',
+                     url: 'https://github.com/YassineEssid/ProjetDevops.git'
             }
         }
 
-        stage('Build') {
+        stage('Build & Test') { // Combine build et tests
             steps {
-                script {
-                    sh 'mvn clean package -DskipTests'
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                script {
-                    sh 'mvn test'
-                }
+                sh 'mvn clean verify' // Exécute compile + test + package
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                script {
-                    withSonarQubeEnv('SonarQube') { // Assurez-vous que "SonarQube" est bien configuré dans Jenkins
-                        sh "${SONAR_SCANNER}/bin/sonar-scanner \
+                withSonarQubeEnv('SonarQube') {
+                    // Récupérer le token depuis les credentials Jenkins
+                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                        sh """
+                            ${SONAR_SCANNER}/bin/sonar-scanner \
                             -Dsonar.projectKey=devopsSecure \
                             -Dsonar.sources=. \
-                            -Dsonar.host.url=http://localhost:9000 \
-                            -Dsonar.login=sqp_f2eaf381d07b589d399fa861e0001af1617f3df4"
+                            -Dsonar.host.url=http://sonar.example.com \ // Remplacez par votre URL
+                            -Dsonar.login=${SONAR_TOKEN}
+                        """
                     }
                 }
             }
@@ -48,20 +43,12 @@ pipeline {
 
         stage('Quality Gate') {
             steps {
-                script {
-                    timeout(time: 2, unit: 'MINUTES') { // Timeout pour éviter un blocage du pipeline
-                        waitForQualityGate abortPipeline: true
-                    }
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
                 }
             }
         }
 
-        stage('Package') {
-            steps {
-                script {
-                    sh 'mvn package'
-                }
-            }
-        }
+        // Supprimer l'étape Package redondante
     }
 }
