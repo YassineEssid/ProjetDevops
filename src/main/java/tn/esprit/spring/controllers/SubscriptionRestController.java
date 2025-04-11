@@ -16,7 +16,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/subscription")
 @RequiredArgsConstructor
-public class  RestController {
+public class  SubscriptionRestController {
 
     private final ISubscriptionServices subscriptionServices;
 
