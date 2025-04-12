@@ -1,17 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.9.4-eclipse-temurin-17' // Image avec Maven + Java
-            args '-v $HOME/.m2:/root/.m2' // Cache Maven partagé
-        }
-    }
-
-    environment {
-        SONAR_PROJECT_KEY = 'ProjetDevops'
-        SONAR_PROJECT_NAME = 'ProjetDevops'
-        SONAR_XML_REPORT_PATH = 'target/site/jacoco/jacoco.xml'
-    }
-
+    agent any
     stages {
 
         stage('Git') {
@@ -44,12 +32,12 @@ pipeline {
             steps {
                 dir('ProjetDevops') {
                     withSonarQubeEnv('sonarqube') {
-                        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_TOKEN')]) {
+                        withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
                             sh """
-                                mvn sonar:sonar \\
-                                -Dsonar.token=$SONAR_TOKEN \\
-                                -Dsonar.projectKey=${SONAR_PROJECT_KEY} \\
-                                -Dsonar.projectName=${SONAR_PROJECT_NAME} \\
+                                mvn sonar:sonar \
+                                -Dsonar.token=$SONAR_TOKEN \
+                                -Dsonar.projectKey= ProjetDevops \
+                                -Dsonar.projectName= ProjetDevops \
                                 -Dsonar.coverage.jacoco.xmlReportPaths=${SONAR_XML_REPORT_PATH} \\
                                 -Dsonar.java.coveragePlugin=jacoco
                             """
