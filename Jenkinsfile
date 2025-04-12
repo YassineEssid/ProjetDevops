@@ -1,7 +1,11 @@
 pipeline {
     agent any
-    stages {
 
+    tools {
+        maven 'Maven 3.8.6' // ➜ le nom défini dans Jenkins > Global Tool Configuration
+    }
+
+    stages {
         stage('Git') {
             steps {
                 dir('ProjetDevops') {
@@ -36,9 +40,9 @@ pipeline {
                             sh """
                                 mvn sonar:sonar \
                                 -Dsonar.token=$SONAR_TOKEN \
-                                -Dsonar.projectKey= ProjetDevops \
-                                -Dsonar.projectName= ProjetDevops \
-                                -Dsonar.coverage.jacoco.xmlReportPaths=${SONAR_XML_REPORT_PATH} \\
+                                -Dsonar.projectKey=ProjetDevops \
+                                -Dsonar.projectName=ProjetDevops \
+                                -Dsonar.coverage.jacoco.xmlReportPaths=${SONAR_XML_REPORT_PATH} \
                                 -Dsonar.java.coveragePlugin=jacoco
                             """
                         }
