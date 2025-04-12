@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        SONAR_TOKEN = credentials('sonar-creds') // Utilisez Jenkins Credentials pour le token SonarQube
         DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski:latest'
     }
 
@@ -34,15 +33,15 @@ pipeline {
         }
 
         // 3. SonarQube Analysis
-          stage('SonarQube Analysis') {
-              steps {
-                  script {
-                      withCredentials([string(credentialsId: 'sonar-creds', variable: 'SONAR_TOKEN')]) {
-                          sh 'mvn clean verify sonar:sonar -Dsonar.login=${SONAR_TOKEN} -Dsonar.host.url=http://192.168.33.10:9000'
-                      }
-                  }
-              }
-          }
+        stage('SonarQube Analysis') {
+            agent any
+            steps {
+                // Set SonarQube environment variables properly
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn clean package sonar:sonar'
+                }
+            }
+        }
 
             // 4. Deploy Maven artifact to Nexus
             stage('Deploy to Nexus') {
