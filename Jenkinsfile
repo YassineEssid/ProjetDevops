@@ -5,7 +5,7 @@ pipeline {
         SONAR_PROJECT_KEY = 'DevopsYoussef'
         SONAR_PROJECT_NAME = 'DevopsYoussef'
         SONAR_XML_REPORT_PATH = 'target/site/jacoco/jacoco.xml'
-        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski'
+        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski:latest'
     }
 
     stages {
