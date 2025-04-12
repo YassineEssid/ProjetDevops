@@ -23,13 +23,13 @@ pipeline {
             steps {
               script {
                   // Start MySQL with Docker Compose
-                  sh 'docker-compose -f docker-compose.yml up -d mysqldb'
+                  sh 'docker compose -f docker-compose.yml up -d mysqldb'
 
                   // Run tests
                   sh 'mvn clean test -Dspring.profiles.active=test'
 
                   // Stop MySQL after tests
-                  sh 'docker-compose -f docker-compose.yml down'
+                  sh 'docker compose -f docker-compose.yml down'
               }
 
             }
@@ -80,7 +80,7 @@ pipeline {
         stage('Run Docker Compose') {
             steps {
                 script {
-                    sh 'docker-compose -f docker-compose.yml up -d'
+                    sh 'docker compose -f docker-compose.yml up -d'
                 }
             }
         }
