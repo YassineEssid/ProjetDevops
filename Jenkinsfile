@@ -1,8 +1,8 @@
 pipeline {
-    agent any
-
-    tools {
-        maven 'Maven 3.8.6' // ➜ le nom défini dans Jenkins > Global Tool Configuration
+    agent {
+        docker {
+            image 'maven:3.8.6-openjdk-17'
+        }
     }
 
     stages {
