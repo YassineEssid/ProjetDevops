@@ -23,7 +23,7 @@ pipeline {
             steps {
               script {
                   // Start MySQL with Docker Compose
-                  sh 'docker-compose -f docker-compose.yml up -d mysql'
+                  sh 'docker-compose -f docker-compose.yml up -d mysqldb'
 
                   // Run tests
                   sh 'mvn clean test -Dspring.profiles.active=test'
