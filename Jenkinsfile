@@ -25,8 +25,6 @@ pipeline {
                   // Run tests
                   sh 'mvn clean test -Dspring.profiles.active=test'
 
-                  // Stop MySQL after tests
-                  sh 'docker compose -f docker-compose.yml down'
               }
 
             }
