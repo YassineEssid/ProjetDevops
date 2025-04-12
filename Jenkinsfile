@@ -21,7 +21,10 @@ pipeline {
         // 2. Run unit tests (Mockito & JUnit)
         stage('Build & Test') {
             steps {
+                sh 'docker-compose -f docker-compose.yml up -d mysqldb'
                 sh 'mvn clean test -Dspring.profiles.active=test'
+                sh 'docker-compose -f docker-compose.yml down'
+
             }
         }
 
