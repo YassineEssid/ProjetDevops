@@ -1,23 +1,64 @@
 pipeline {
     agent any
-
     stages {
-        stage('Install dependencies') {
+        stage('Git') {
             steps {
-                sh '/usr/bin/npm install' // ← remplace ce chemin selon ton système
+                dir('kaddem') {
+                    git branch: 'feat/subscription', credentialsId: 'helmi123', url: 'https://github.com/YassineEssid/ProjetDevops.git'
+                }
             }
         }
 
-        stage('Unit Test') {
+        stage('Build') {
             steps {
-                sh '/usr/bin/npm test'
+                dir('kaddem') {
+                    sh 'mvn clean compile'
+                }
             }
         }
 
-        stage('Build application') {
+        stage('Run Tests') {
             steps {
-                sh '/usr/bin/npm run build-dev'
+                dir('kaddem') {
+                    sh 'mvn test -Dspring.profiles.active=test'
+                }
             }
         }
+
+        stage('SonarQube Analysis') {
+            steps {
+                dir('kaddem') {
+                    withSonarQubeEnv('sonarqube') {
+                        withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_TOKEN')]) {
+                            sh '''
+                                mvn sonar:sonar \
+                                -Dsonar.token=$SONAR_TOKEN \
+                                -Dsonar.projectKey=kaddemm \
+                                -Dsonar.projectName=kaddem \
+                                -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                                -Dsonar.java.coveragePlugin=jacoco
+                            '''
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Nexus') {
+            steps {
+                dir('kaddem') {
+                    sh 'mvn deploy -e -X -DskipTests'
+                }
+            }
+        }
+
+        // stage('Nexus') {
+        //     steps {
+        //         dir('kaddem') {
+        //             sh 'mvn clean deploy -Dmaven.test.skip=true'
+        //         }
+        //     }
+        // }
+
     }
 }
