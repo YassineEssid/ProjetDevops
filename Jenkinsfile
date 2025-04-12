@@ -2,9 +2,8 @@ pipeline {
     agent any
 
     environment {
-        SONAR_PROJECT_KEY = 'DevopsYoussef'
-        SONAR_PROJECT_NAME = 'DevopsYoussef'
-        SONAR_XML_REPORT_PATH = 'target/site/jacoco/jacoco.xml'
+        SONAR_HOST_URL = 'http://192.168.33.10:9000/'
+        SONAR_TOKEN = credentials('sonar-creds') // Utilisez Jenkins Credentials pour le token SonarQube
         DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski:latest'
     }
 
@@ -36,26 +35,21 @@ pipeline {
         }
 
         // 3. SonarQube Analysis
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh """
-                        mvn sonar:sonar \\
-                        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \\
-                        -Dsonar.projectName=${SONAR_PROJECT_NAME} \\
-                        -Dsonar.coverage.jacoco.xmlReportPaths=${SONAR_XML_REPORT_PATH} \\
-                        -Dsonar.java.coveragePlugin=jacoco
-                    """
+         stage('SonarQube Analysis') {
+             steps {
+                 // Run the SonarQube analysis using Maven and send the report to SonarQube server
+                 withSonarQubeEnv(SONAR_HOST_URL) {
+                     sh 'mvn sonar:sonar -Dsonar.login=${SONAR_TOKEN}'
+                 }
+             }
+         }
+
+            // 4. Deploy Maven artifact to Nexus
+            stage('Deploy to Nexus') {
+                steps {
+                    sh 'mvn deploy -DskipTests'
                 }
             }
-        }
-
-        // 4. Deploy Maven artifact to Nexus
-        stage('Deploy to Nexus') {
-            steps {
-                sh 'mvn deploy -DskipTests'
-            }
-        }
 
         // 5. Build Docker Image
         stage('Build Docker Image') {
