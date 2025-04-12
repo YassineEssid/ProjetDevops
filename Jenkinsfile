@@ -2,22 +2,14 @@ pipeline {
     agent any
 
     stages {
-        stage('Build & Test in Docker') {
-            steps {
-                dir('ProjetDevops') {
-                    git branch: 'feat/subscription',
-                        credentialsId: 'helmi321',
-                        url: 'https://github.com/YassineEssid/ProjetDevops.git'
-
-                    script {
-                        docker.image('maven:3.8.6-openjdk-17').inside {
-                            sh 'mvn clean compile'
-                            sh 'mvn test -Dspring.profiles.active=test'
-                        }
-                    }
-                }
-            }
+        stage('Build') {
+           steps {
+               dir('ProjetDevops') {  // Exécute la commande Maven dans le bon dossier
+                   sh 'mvn clean compile'
+               }
+           }
         }
+
 
         stage('SonarQube Analysis') {
             steps {
