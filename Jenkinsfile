@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Git') {
             steps {
-                dir('kaddem') {
+                dir('ProjetDevops') {
                     git branch: 'feat/subscription', credentialsId: 'helmi123', url: 'https://github.com/YassineEssid/ProjetDevops.git'
                 }
             }
@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('kaddem') {
+                dir('ProjetDevops') {
                     sh 'mvn clean compile'
                 }
             }
@@ -19,7 +19,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                dir('kaddem') {
+                dir('ProjetDevops') {
                     sh 'mvn test -Dspring.profiles.active=test'
                 }
             }
@@ -27,7 +27,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                dir('kaddem') {
+                dir('ProjetDevops') {
                     withSonarQubeEnv('sonarqube') {
                         withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_TOKEN')]) {
                             sh '''
@@ -46,7 +46,7 @@ pipeline {
 
         stage('Deploy to Nexus') {
             steps {
-                dir('kaddem') {
+                dir('ProjetDevops') {
                     sh 'mvn deploy -e -X -DskipTests'
                 }
             }
@@ -54,7 +54,7 @@ pipeline {
 
         // stage('Nexus') {
         //     steps {
-        //         dir('kaddem') {
+        //         dir('ProjetDevops') {
         //             sh 'mvn clean deploy -Dmaven.test.skip=true'
         //         }
         //     }
