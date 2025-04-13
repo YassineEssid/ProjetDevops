@@ -10,11 +10,11 @@ pipeline {
         gitRepo = "https://github.com/YassineEssid/ProjetDevops.git"
 
         // SonarQube
-        /*
-        SONAR_URL = "http://192.168.1.100:9000"
-        SONAR_TOKEN = "squ_c3a0319f3f2ea74fdb5a385578223466fc3d8736"
-        SONAR_PROJECT_KEY = "kenzabenslimane_4twin3_gestionski_v2"
-        SONAR_PROJECT_NAME = "kenzabenslimane-4Twin3-GestionSki-V2"*/
+
+        SONAR_URL = "http://localhost:9000"
+        SONAR_TOKEN = "squ_af142814424e203d67bb97741a4c3b47adc0cd50"
+        SONAR_PROJECT_KEY = "subscription"
+        SONAR_PROJECT_NAME = "subscription"
     }
 
     stages {
@@ -41,25 +41,27 @@ pipeline {
             }
         }
 
-        /* stage('SonarQube Analysis') {
-            steps {
-                dir('ProjetDevops') {
-                    withSonarQubeEnv('sonarqube') {
-                        withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
-                            sh '''
-                            mvn clean verify
-                            mvn sonar:sonar \
-                              -Dsonar.token=$SONAR_TOKEN \
-                              -Dsonar.projectKey=ProjetDevops \
-                              -Dsonar.projectName=ProjetDevops \
-                              -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                              -Dsonar.java.coveragePlugin=jacoco
-                            '''
-                        }
-                    }
-                }
-            }
-        } */
+         stage('SonarQube Analysis') {
+             steps {
+                 script {
+                     echo "Using SonarQube URL: ${SONAR_URL}"
+                     def scannerHome = tool 'SonarScan'
+                     withSonarQubeEnv {
+                         sh """
+                             ${scannerHome}/bin/sonar-scanner \
+                             -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                             -Dsonar.projectName=${SONAR_PROJECT_NAME} \
+                             -Dsonar.sources=src \
+                             -Dsonar.java.binaries=target/classes \
+                             -Dsonar.sourceEncoding=UTF-8 \
+                             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                             -Dsonar.login=${SONAR_TOKEN} \
+                             -Dsonar.scanner.force-deprecated-java-version=true
+                         """
+                     }
+                 }
+             }
+         }
 
         stage('Package') {
             steps {
@@ -67,13 +69,13 @@ pipeline {
             }
         }
 
-        stage('Deploy to Nexus') {
+/*         stage('Deploy to Nexus') {
             steps {
                 dir('ProjetDevops') {
                     sh 'mvn deploy'
                 }
             }
-        }
+        } */
 
         /*
         stage('SonarQube Analysis') {
@@ -96,26 +98,7 @@ pipeline {
         }*/
 
 
-/*
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool 'SonarScan'
-                    withSonarQubeEnv {
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                            -Dsonar.projectName=${SONAR_PROJECT_NAME} \
-                            -Dsonar.sources=src \
-                            -Dsonar.java.binaries=target/classes \
-                            -Dsonar.sourceEncoding=UTF-8 \
-                            -Dsonar.login=${SONAR_TOKEN} \
-                            -Dsonar.scanner.force-deprecated-java-version=true
-                        """
-                    }
-                }
-            }
-        }*/
+
         /*
         stage('Build Docker Image') {
             steps {
