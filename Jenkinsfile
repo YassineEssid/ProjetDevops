@@ -40,9 +40,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('ProjetDevops') {  // Assure-toi que tous les commandes Maven s'exécutent dans le bon dossier
-                    sh 'mvn verify -Dspring.profiles.active=test -T 1C'
-                }
+                sh 'mvn verify -Dspring.profiles.active=test -T 1C'
             }
         }
 
