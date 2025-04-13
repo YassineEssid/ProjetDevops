@@ -80,7 +80,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh """
-                    docker build -t ${IMAGE_NAME}:${VERSION}
+                    docker build -t ${IMAGE_NAME}:${VERSION} .
                     docker tag ${IMAGE_NAME}:${VERSION} ${IMAGE_NAME}:latest
                 """
             }
