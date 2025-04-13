@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         imageName = 'youssefbelhadj/4twin3-gestion-station-ski'
-         registry= '192.168.33.10/:8083/docker-hosted' // Replace with your Nexus Docker registry
+         registry= '192.168.33.10:8084/docker-hosted' // Replace with your Nexus Docker registry
          registryCredentials = 'nexus-creds'
          dockerImage=""
     }
@@ -30,7 +30,7 @@ pipeline {
                stage('Push to Nexus') {
                    steps {
                        script {
-                           docker.withRegistry("http//"+registry, registryCredentials) {
+                           docker.withRegistry("https//"+registry, registryCredentials) {
                                echo "Logged in to Nexus Docker registry"
                                dockerImage.push('latest')
                            }
