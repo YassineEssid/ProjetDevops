@@ -108,6 +108,24 @@ pipeline {
         }
     }
 
+
+         stage("Run Prometheus") {
+            steps {
+                script {
+                    sh 'docker start prometheus || docker run -d --name prometheus prom/prometheus'
+                }
+            }
+        }
+
+        stage("Run Grafana") {
+            steps {
+                script {
+                    sh 'docker start grafana || docker run -d --name grafana grafana/grafana'
+                }
+            }
+        }
+    }
+
     post {
         success {
             echo "✅ Pipeline completed successfully!"
