@@ -21,7 +21,8 @@ services:
       start_period: 30s
   
   spring_app:
-    image: 172.17.0.4:8082/helmisubscription:${IMAGE_TAG}
+    #image: 172.17.0.4:8082/helmisubscription:${IMAGE_TAG}
+    image: ${DOCKER_USERNAME}/backend:latest
     container_name: backend_spring_app
     depends_on:
       mysql_db2:
