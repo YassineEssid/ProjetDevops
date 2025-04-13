@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski'
       registryCredentials = "nexus-creds"
-        registry = "192.168.33.10:8082"
+        registry = "192.168.33.10:8083"
     }
 
     stages {
