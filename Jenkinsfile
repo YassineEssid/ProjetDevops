@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        imageName = 'youssefbelhadj/4twin3-gestion-station-ski'
-         registry= '192.168.33.10:8084/docker-hosted' // Replace with your Nexus Docker registry
-         registryCredentials = 'nexus-creds'
-         dockerImage=""
+        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski'
+        DOCKER_USERNAME = 'admin' // Jenkins credentials for Docker username
+        DOCKER_PASSWORD = 'nexus'  // Jenkins credentials for Docker password
+
     }
 
     stages {
@@ -18,33 +18,37 @@ pipeline {
             }
         }
 
+            // 5. Build Docker Image
+            stage('Build Docker Image') {
+                steps {
+                   script {
+                        echo "Checking Docker version..."
+                        sh 'docker --version'
+                        echo "Checking Docker images..."
+                        sh 'docker images'
+                        echo "Building Docker image..."
 
-       stage('Build Docker Image') {
-                   steps {
-                       script {
-                               dockerImage = docker.build imageName
-                       }
-                   }
-               }
-
-               stage('Push to Nexus') {
-                   steps {
-                       script {
-                           docker.withRegistry("https//"+registry, registryCredentials) {
-                               echo "Logged in to Nexus Docker registry"
-                               dockerImage.push('latest')
-                           }
-                       }
-                   }
-               }
-
-        stage('Run Docker Compose') {
+                }
+        }
+        stage('Authenticate to Nexus Docker Registry') {
             steps {
                 script {
-                    sh 'docker compose -f docker-compose.yml up -d'
+                    // Login to Nexus Docker registry
+                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin http://192.168.33.10:8081'
                 }
             }
         }
 
-    }
+        // 6. Push Docker Image Nexus
+        stage('Push Docker Image to Nexus') {
+            steps {
+                script {
+                    docker.withRegistry('http://192.168.33.10:8081', 'nexus-creds') {
+                        docker.image("${DOCKER_IMAGE}").push("latest")
+                    }
+                }
+            }
+        }
+
+
 }
