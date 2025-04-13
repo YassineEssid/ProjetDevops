@@ -11,11 +11,14 @@ pipeline {
         }
 
         stage('Run Tests') {
-           steps {
-               dir('ProjetDevops') {
-                   sh 'mvn test -Dspring.profiles.active=test'
-               }
-           }
+            steps {
+                sh 'mvn test jacoco:report'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
+                }
+            }
         }
 
         stage('SonarQube Analysis') {

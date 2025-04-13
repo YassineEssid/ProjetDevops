@@ -66,6 +66,37 @@
 			<version>5.9.2</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Dépendance Mockito -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>5.10.0</version> <!-- ou une version stable récente -->
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Byte Buddy : nécessaire pour Mockito -->
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+			<version>1.14.7</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Byte Buddy Agent : utile pour certaines configurations -->
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy-agent</artifactId>
+			<version>1.14.7</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- JUnit 5 si ce n'est pas déjà fait -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.10.0</version>
+			<scope>test</scope>
+		</dependency>
 
 	</dependencies>
 
