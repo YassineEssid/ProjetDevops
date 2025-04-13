@@ -27,12 +27,7 @@ pipeline {
                 }
             }
         }
-        /*
-        stage('Build') {
-            steps {
-                sh 'mvn clean compile jacoco:prepare-agent'
-            }
-        }*/
+
         stage('Build') {
            steps {
                dir('ProjetDevops') {  // Exécute la commande Maven dans le bon dossier
@@ -41,19 +36,11 @@ pipeline {
            }
         }
 
-        stage('Run Tests') {
-           steps {
-               dir('ProjetDevops') {
-                   sh 'mvn test -Dspring.profiles.active=test'
-               }
-           }
-        }
-/*
-        stage('Build & Test') {
+        stage('Test') {
             steps {
                 sh 'mvn verify -Dspring.profiles.active=test -T 1C'
             }
-        }*/
+        }
 
         stage('SonarQube Analysis') {
             steps {
