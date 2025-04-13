@@ -48,13 +48,18 @@ pipeline {
                 }
             }
 
-        // 5. Build Docker Image
-        stage('Build Docker Image') {
-            steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}", ".")
+            // 5. Build Docker Image
+            stage('Build Docker Image') {
+                steps {
+                   script {
+                        echo "Checking Docker version..."
+                        sh 'docker --version'
+                        echo "Checking Docker images..."
+                        sh 'docker images'
+                        echo "Building Docker image..."
+                        docker.build("${DOCKER_IMAGE}", ".")
+                    }
                 }
-            }
         }
 
         // 6. Push Docker Image Nexus
