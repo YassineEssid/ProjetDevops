@@ -78,25 +78,26 @@ pipeline {
         stage('Automated Test') {
             steps {
                 script {
-                    // Add an element via POST request
                     echo "Adding a new skier..."
                     def postResponse = sh(script: '''
-                        curl -X POST http://192.168.33.10:8089/api/skier/add -H "Content-Type: application/json" -d '{
-                                                                                                                       "firstName": "Youssef",
-                                                                                                                       "lastName": "Ben Ali",
-                                                                                                                       "dateOfBirth": "1998-07-20",
-                                                                                                                       "city": "Tunis",
-                                                                                                                       "subscription": {
-                                                                                                                         "startDate": "2025-04-01",
-                                                                                                                         "typeSub": "ANNUAL"  // replace with your enum value if needed
-                                                                                                                       }
-
-                                                                                                                     }
+                        curl -X POST http://192.168.33.10:8089/api/skier/add \
+                        -H "Content-Type: application/json" \
+                        -d @- <<EOF
+        {
+          "firstName": "Youssef",
+          "lastName": "Ben Ali",
+          "dateOfBirth": "1998-07-20",
+          "city": "Tunis",
+          "subscription": {
+            "startDate": "2025-04-01",
+            "typeSub": "ANNUAL"
+          }
+        }
+        EOF
                     ''', returnStdout: true).trim()
 
                     echo "POST Response: ${postResponse}"
 
-                    // Retrieve the added element via GET request
                     echo "Retrieving the added element..."
                     def getResponse = sh(script: '''
                         curl http://192.168.33.10:8089/api/skier/get/1
@@ -104,13 +105,14 @@ pipeline {
 
                     echo "GET Response: ${getResponse}"
 
-                    // Simple check to confirm the element was added
-                    if (!postResponse.contains("success") || !getResponse.contains("New Element")) {
-                        error "Automated test failed: Element not added correctly!"
+                    // Adjust the checks based on your actual API responses
+                    if (!getResponse.contains("Youssef")) {
+                        error "Automated test failed: Skier not found!"
                     }
                 }
             }
         }
+
 
 
 }
