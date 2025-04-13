@@ -44,7 +44,7 @@ pipeline {
             // 4. Deploy Maven artifact to Nexus
             stage('Deploy to Nexus') {
                 steps {
-                    sh 'mvn deploy -DskipTests'
+                    sh 'mvn deploy -DskipTests -s /usr/share/maven/conf/settings.xml'
                 }
             }
 
