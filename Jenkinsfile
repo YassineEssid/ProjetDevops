@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski'
-        NEXUS_URL = "192.168.33.10:8083" // adapte le port selon ton Nexus
-        NEXUS_REPO = "docker-hosted"     // adapte si le nom du repo est différent
-        NEXUS_CREDENTIALS_ID = "nexus-creds" // Jenkins Credentials ID
+             IMAGE_TAG = 'latest'
+             REGISTRY_URL = 'nexus.example.com:8083' // Replace with your Nexus Docker registry
+             DOCKER_CREDS = 'nexus-creds'
     }
 
     stages {
@@ -19,25 +19,23 @@ pipeline {
         }
 
 
-            // 5. Build Docker Image
-            stage('Build Docker Image') {
-                steps {
-                   script {
-                        echo "Checking Docker version..."
-                        sh 'docker --version'
-                        echo "Checking Docker images..."
-                        sh 'docker images'
-                        echo "Building Docker image..."
-                        sh 'docker build -t youssefbelhadj/4twin3-gestion-station-ski .'                }
-                }
-        }
+       stage('Build Docker Image') {
+                   steps {
+                       script {
+                           dockerImage = docker.build("${REGISTRY_URL}/${DOCKER_IMAGE}:${IMAGE_TAG}")
+                       }
+                   }
+               }
 
-        // 6. Push Docker Image Nexus
-        stage('Push Docker Image to Nexus') {
-           steps {
-                sh "docker push ${NEXUS_URL}/docker-hosted/${IMAGE_NAME}"
-           }
-        }
+               stage('Push to Nexus') {
+                   steps {
+                       script {
+                           docker.withRegistry("https://${REGISTRY_URL}", "${DOCKER_CREDS}") {
+                               dockerImage.push()
+                           }
+                       }
+                   }
+               }
 
         stage('Run Docker Compose') {
             steps {
