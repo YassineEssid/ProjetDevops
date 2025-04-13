@@ -62,20 +62,16 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 dir('ProjetDevops') {
-                    script {
-                        withSonarQubeEnv('helmi123') {
-                            withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
-                                docker.image('maven:3.8.6-openjdk-17').inside {
-                                    sh """
-                                        mvn sonar:sonar \
-                                        -Dsonar.token=$SONAR_TOKEN \
-                                        -Dsonar.projectKey=ProjetDevops \
-                                        -Dsonar.projectName=ProjetDevops \
-                                        -Dsonar.coverage.jacoco.xmlReportPaths=${SONAR_XML_REPORT_PATH} \
-                                        -Dsonar.java.coveragePlugin=jacoco
-                                    """
-                                }
-                            }
+                    withSonarQubeEnv('helmi123') {
+                        withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
+                          sh '''
+                          mvn sonar:sonar \
+                          -Dsonar.token=$SONAR_TOKEN \
+                          -Dsonar.projectKey=ProjetDevops \
+                          -Dsonar.projectName=ProjetDevops \
+                          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                          -Dsonar.java.coveragePlugin=jacoco
+                          '''
                         }
                     }
                 }
