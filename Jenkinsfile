@@ -10,6 +10,13 @@ pipeline {
            }
         }
 
+        stage('Run Tests') {
+           steps {
+               dir('ProjetDevops') {
+                   sh 'mvn test -Dspring.profiles.active=test'
+               }
+           }
+        }
 
         stage('SonarQube Analysis') {
             steps {
