@@ -27,7 +27,7 @@ pipeline {
                         echo "Checking Docker images..."
                         sh 'docker images'
                         echo "Building Docker image..."
-
+                    }
                 }
         }
         stage('Authenticate to Nexus Docker Registry') {
