@@ -2,17 +2,15 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = '192.168.33.10:8084' // Your Nexus Docker registry
-        IMAGE_NAME = '4twin3-gestion-station-ski'
-        IMAGE_TAG = 'latest'
-        FULL_IMAGE = "${REGISTRY}/youssefbelhadj/${IMAGE_NAME}:${IMAGE_TAG}"
-        DOCKER_USER = 'admin'
-        DOCKER_PASS = 'nexus'
+        imageName = 'youssefbelhadj/4twin3-gestion-station-ski'
+         registry= '192.168.33.10/:8083/docker-hosted' // Replace with your Nexus Docker registry
+         registryCredentials = 'nexus-creds'
+         dockerImage=""
     }
 
     stages {
 
-        // 1. Checkout Code
+        // 1. Checkout from GitHub
         stage('Checkout') {
             steps {
                 git branch: 'feat/youssef',
@@ -20,33 +18,33 @@ pipeline {
             }
         }
 
-        // 2. Build Docker Image
-        stage('Build Docker Image') {
+
+       stage('Build Docker Image') {
+                   steps {
+                       script {
+                               dockerImage = docker.build imageName
+                       }
+                   }
+               }
+
+               stage('Push to Nexus') {
+                   steps {
+                       script {
+                           docker.withRegistry("http//"+registry, registryCredentials) {
+                               echo "Logged in to Nexus Docker registry"
+                               dockerImage.push('latest')
+                           }
+                       }
+                   }
+               }
+
+        stage('Run Docker Compose') {
             steps {
                 script {
-                    echo "Checking Docker version..."
-                    sh 'docker --version'
-
-                    echo "Building Docker image..."
-                    sh "docker build -t ${FULL_IMAGE} ."
+                    sh 'docker compose -f docker-compose.yml up -d'
                 }
             }
         }
 
-        // 3. Push to Nexus Docker Registry
-        stage('Push to Nexus') {
-            steps {
-                script {
-                    echo "Logging into Nexus registry..."
-                    sh "echo ${DOCKER_PASS} | docker login http://${REGISTRY} -u ${DOCKER_USER} --password-stdin"
-
-                    echo "Pushing Docker image to Nexus..."
-                    sh "docker push ${FULL_IMAGE}"
-
-                    echo "Logout from Docker registry"
-                    sh 'docker logout'
-                }
-            }
-        }
     }
 }
