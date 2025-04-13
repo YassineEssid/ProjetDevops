@@ -11,7 +11,8 @@ pipeline {
 
 
         // SonarQube
-        /*SONAR_URL = "http://192.168.1.100:9000"
+        /*
+        SONAR_URL = "http://192.168.1.100:9000"
         SONAR_TOKEN = "squ_c3a0319f3f2ea74fdb5a385578223466fc3d8736"
         SONAR_PROJECT_KEY = "kenzabenslimane_4twin3_gestionski_v2"
         SONAR_PROJECT_NAME = "kenzabenslimane-4Twin3-GestionSki-V2"*/
@@ -33,7 +34,32 @@ pipeline {
             }
         }
 
-        /*stage('SonarQube Analysis') {
+         stage('SonarQube Analysis') {
+                    steps {
+                        dir('ProjetDevops') {
+                            script {
+                                withSonarQubeEnv('sonarqube') {
+                                    withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
+                                        docker.image('maven:3.8.6-openjdk-17').inside {
+                                            sh """
+                                                mvn sonar:sonar \
+                                                -Dsonar.token=$SONAR_TOKEN \
+                                                -Dsonar.projectKey=ProjetDevops \
+                                                -Dsonar.projectName=ProjetDevops \
+                                                -Dsonar.coverage.jacoco.xmlReportPaths=${SONAR_XML_REPORT_PATH} \
+                                                -Dsonar.java.coveragePlugin=jacoco
+                                            """
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+/*
+        stage('SonarQube Analysis') {
             steps {
                 script {
                     def scannerHome = tool 'SonarScan'
@@ -51,7 +77,8 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
+        /*
         stage('Build Docker Image') {
             steps {
                 sh "DOCKER_BUILDKIT=1 docker build -t $registry/$imageName:$imageTag ."
@@ -89,11 +116,6 @@ pipeline {
                 }
             }
         }*/
-        stage('Publish Test Results') {
-            steps {
-                junit '**/target/surefire-reports/*.xml'  // Indique le chemin des fichiers XML de tests
-            }
-        }
 
     }
 
