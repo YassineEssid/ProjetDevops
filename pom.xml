@@ -18,6 +18,7 @@
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
 	</properties>
 	<dependencies>
+		<!-- Spring Boot Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -26,28 +27,46 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+
+		<!-- Database Dependency -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<!-- Lombok Dependency -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
+		<!-- OpenAPI for API Documentation -->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.6.12</version>
 		</dependency>
+
+		<!-- H2 for Testing -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Testing Dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -56,72 +75,78 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>5.2.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- JUnit 5 -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>5.9.2</version>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.8.2</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Dépendance Mockito -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>5.10.0</version> <!-- ou une version stable récente -->
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Byte Buddy : nécessaire pour Mockito -->
-		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy</artifactId>
-			<version>1.14.7</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Byte Buddy Agent : utile pour certaines configurations -->
-		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy-agent</artifactId>
-			<version>1.14.7</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- JUnit 5 si ce n'est pas déjà fait -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>5.10.0</version>
-			<scope>test</scope>
-		</dependency>
-
 	</dependencies>
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
+			<!-- Compiler Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
 					<source>9</source>
 					<target>9</target>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.30</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+
+			<!-- Spring Boot Plugin -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<!-- Surefire Plugin - Test Reporting -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M7</version>
+				<configuration>
+					<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+				</configuration>
+			</plugin>
+
+			<!-- Optional: SonarQube Plugin (for Sonar Analysis if used) -->
+			<plugin>
+				<groupId>org.sonarsource.scanner.maven</groupId>
+				<artifactId>sonar-maven-plugin</artifactId>
+				<version>3.9.1.2184</version>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.10</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
 
