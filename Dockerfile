@@ -1,17 +1,13 @@
-# Use a lightweight Java image
 FROM openjdk:17-jdk-alpine
 
-# Set environment variables (optional for future use)
-ENV JAVA_OPTS=""
+ENV NEXUS_USERNAME=admin
+ENV NEXUS_PASSWORD=nexus
 
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the jar file (make sure the path is correct after build)
-COPY target/*.jar app.jar
-
-# Expose the port your app runs on
 EXPOSE 8089
 
-# Run the app
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+RUN apk add --no-cache curl \
+    && curl -u ${NEXUS_USERNAME}:${NEXUS_PASSWORD} -O http://192.168.50.4:8081/repository/maven-releases/tn/esprit/spring/4TWIN3-gestion-station-ski/1.0/4TWIN3-gestion-station-ski-1.0.jar
+
+ENTRYPOINT ["java", "-jar", "4TWIN3-gestion-station-ski-1.0.jar"]
