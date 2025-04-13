@@ -1,6 +1,115 @@
 pipeline {
     agent any
 
+    environment {
+        //registryCredentials = "nexus1"
+        //registry = "192.168.1.100:8083"
+        //imageName = "kenzabenslimane_4twin3_thunder_gestionski"
+        //imageTag = "6.0-SNAPSHOT-${env.BUILD_NUMBER}"
+        gitBranch = "feat/subscription"
+        gitRepo = "https://github.com/YassineEssid/ProjetDevops.git"
+
+
+        // SonarQube
+        /*SONAR_URL = "http://192.168.1.100:9000"
+        SONAR_TOKEN = "squ_c3a0319f3f2ea74fdb5a385578223466fc3d8736"
+        SONAR_PROJECT_KEY = "kenzabenslimane_4twin3_gestionski_v2"
+        SONAR_PROJECT_NAME = "kenzabenslimane-4Twin3-GestionSki-V2"*/
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                script {
+                    git branch: gitBranch, url: gitRepo
+                    sh 'ls -l'
+                }
+            }
+        }
+
+        stage('Build & Test') {
+            steps {
+                sh 'mvn verify -Dspring.profiles.active=test -T 1C'
+            }
+        }
+
+        /*stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarScan'
+                    withSonarQubeEnv {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
+                            -Dsonar.projectName=${SONAR_PROJECT_NAME} \
+                            -Dsonar.sources=src \
+                            -Dsonar.java.binaries=target/classes \
+                            -Dsonar.sourceEncoding=UTF-8 \
+                            -Dsonar.login=${SONAR_TOKEN} \
+                            -Dsonar.scanner.force-deprecated-java-version=true
+                        """
+                    }
+                }
+            }
+        }
+        stage('Build Docker Image') {
+            steps {
+                sh "DOCKER_BUILDKIT=1 docker build -t $registry/$imageName:$imageTag ."
+            }
+        }
+
+        stage('Push to Nexus') {
+            steps {
+                script {
+                    docker.withRegistry("http://${registry}", registryCredentials) {
+                        sh "docker push --quiet $registry/$imageName:$imageTag"
+                    }
+                }
+            }
+        }
+
+        stage('Run Application') {
+            steps {
+                script {
+                    docker.withRegistry("http://${registry}", "${registryCredentials}") {
+                        sh "docker pull ${registry}/${imageName}:${imageTag}"
+
+                        // Replace old image reference with the current one
+                        sh "sed -i 's|192.168.1.100:8083/kenzabenslimane_4twin3_thunder_gestionski:IMAGE_TAG|${registry}/${imageName}:${imageTag}|g' docker-compose.yml"
+                        sh "cat docker-compose.yml"
+
+                        // Stop and remove existing containers
+                        sh "docker-compose down --remove-orphans"
+
+                        // Run the container with updated image tag
+                        withEnv(["IMAGE_TAG=${imageTag}"]) {
+                            sh "docker-compose up -d"
+                        }
+                    }
+                }
+            }
+        }*/
+        stage('Publish Test Results') {
+            steps {
+                junit '**/target/surefire-reports/*.xml'  // Indique le chemin des fichiers XML de tests
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo "✅ Pipeline completed successfully!"
+        }
+        failure {
+            echo "❌ Pipeline failed! Check the logs."
+        }
+    }
+}
+
+/*pipeline {
+    agent any
+
     stages {
 
         stage('Build') {
@@ -59,3 +168,4 @@ pipeline {
         }
     }
 }
+*/
