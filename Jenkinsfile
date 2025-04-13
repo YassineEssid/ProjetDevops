@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski'
+        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski:'
     }
+
     stages {
 
         // 1. Checkout from GitHub
@@ -56,8 +57,7 @@ pipeline {
                         echo "Checking Docker images..."
                         sh 'docker images'
                         echo "Building Docker image..."
-                        docker build -t youssefbelhadj/4twin3-gestion-station-ski .
-                    }
+                        sh 'docker build -t youssefbelhadj/4twin3-gestion-station-ski .'                }
                 }
         }
 
