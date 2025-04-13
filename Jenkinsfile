@@ -47,7 +47,7 @@ pipeline {
           stage('Push to Docker Hub') {
                      steps {
                          sh """
-                             docker push ${DOCKER_IMAGE}:
+                             docker push ${DOCKER_IMAGE}
                              docker push ${DOCKER_IMAGE}:latest
                          """
                      }
