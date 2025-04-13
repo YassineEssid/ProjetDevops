@@ -69,7 +69,7 @@ pipeline {
 
         stage('Deploy to Nexus') {
             steps {
-                dir('kaddem') {
+                dir('ProjetDevops') {
                     sh 'mvn deploy'
                 }
             }
