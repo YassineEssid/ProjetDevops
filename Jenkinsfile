@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REGISTRY = '192.168.33.10:8083' // Your Nexus Docker registry
+        REGISTRY = '192.168.33.10:8084' // Your Nexus Docker registry
         IMAGE_NAME = '4twin3-gestion-station-ski'
         IMAGE_TAG = 'latest'
         FULL_IMAGE = "${REGISTRY}/youssefbelhadj/${IMAGE_NAME}:${IMAGE_TAG}"
