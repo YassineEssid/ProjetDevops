@@ -2,10 +2,14 @@ pipeline {
     agent any
 
     environment {
-        registryCredentials = "nexus"
+/*         registryCredentials = "nexus"
         registry = "172.17.0.4:8082"
         imageName = "helmisubscription"
-        imageTag = "6.0-SNAPSHOT-${env.BUILD_NUMBER}"
+        imageTag = "6.0-SNAPSHOT-${env.BUILD_NUMBER}" */
+        IMAGE_NAME = "${DOCKER_USERNAME}/backend"
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub')
+        DOCKER_USERNAME = "helmigargouri"
+        VERSION = "1.0.${BUILD_NUMBER}"
         gitBranch = "feat/subscription"
         gitRepo = "https://github.com/YassineEssid/ProjetDevops.git"
 
@@ -63,22 +67,33 @@ pipeline {
              }
          }
 
-        stage('Build Docker Image') {
-            steps {
-                sh "DOCKER_BUILDKIT=1 docker build -t $registry/$imageName:$imageTag ."
-            }
-        }
-
-        stage('Push to Nexus') {
+        stage('Docker Login') {
             steps {
                 script {
-                    docker.withRegistry("http://${registry}", registryCredentials) {
-                        sh "docker push --quiet $registry/$imageName:$imageTag"
-                    }
+                    sh """
+                        echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
+                    """
                 }
             }
         }
 
+        stage('Build Docker Image') {
+            steps {
+                sh """
+                    docker build -t ${IMAGE_NAME}:${VERSION}
+                    docker tag ${IMAGE_NAME}:${VERSION} ${IMAGE_NAME}:latest
+                """
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                sh """
+                    docker push ${IMAGE_NAME}:${VERSION}
+                    docker push ${IMAGE_NAME}:latest
+                """
+            }
+        }
 
 
 
