@@ -11,7 +11,7 @@ pipeline {
 
         // SonarQube
 
-        SONAR_URL = "http://localhost:9000"
+        SONAR_URL = "http://172.17.0.3:9000"
         SONAR_TOKEN = "squ_af142814424e203d67bb97741a4c3b47adc0cd50"
         SONAR_PROJECT_KEY = "subscription"
         SONAR_PROJECT_NAME = "subscription"
