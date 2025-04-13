@@ -100,8 +100,8 @@ pipeline {
                 script {
                     sh """
                         export IMAGE_TAG=${VERSION}
-                        docker-compose pull || true
-                        docker-compose up -d
+                        docker compose pull || true
+                        docker compose up -d
                     """
                 }
             }
