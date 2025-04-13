@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski:'
+        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski'
       registryCredentials = "nexus-creds"
         registry = "192.168.33.10:8081"
     }
@@ -35,7 +35,7 @@ pipeline {
                   steps {
                       script {
                           docker.withRegistry("http://${registry}", registryCredentials) {
-                              sh "docker push --quiet $registry/$imageName:$imageTag"
+                              sh "docker push --quiet $registry/$DOCKER_IMAGE"
                           }
                       }
                   }
