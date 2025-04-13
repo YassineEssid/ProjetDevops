@@ -1,4 +1,4 @@
-/*package tn.esprit.spring.services;
+package tn.esprit.spring.services.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import tn.esprit.spring.entities.Subscription;
 import tn.esprit.spring.entities.TypeSubscription;
 import tn.esprit.spring.repositories.ISubscriptionRepository;
+import tn.esprit.spring.services.SubscriptionServicesImpl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -83,4 +84,3 @@ class SubscriptionServicesImplTest {
     }
 
 }
-*/
