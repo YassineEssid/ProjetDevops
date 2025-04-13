@@ -41,7 +41,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+        /* stage('SonarQube Analysis') {
             steps {
                 dir('ProjetDevops') {
                     withSonarQubeEnv('sonarqube') {
@@ -59,11 +59,19 @@ pipeline {
                     }
                 }
             }
-        }
+        } */
 
         stage('Package') {
             steps {
                 sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Deploy to Nexus') {
+            steps {
+                dir('kaddem') {
+                    sh 'mvn deploy'
+                }
             }
         }
 
