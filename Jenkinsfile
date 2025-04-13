@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski:latest'
+        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski'
     }
 
     stages {
