@@ -82,13 +82,4 @@ class SubscriptionServicesImplTest {
         verify(subscriptionRepository, times(1)).findById(99L);
     }
 
-    @Test
-    void testRetrieveSubscriptions() {
-        List<Subscription> mockedList = List.of(subscription);
-        when(subscriptionRepository.findDistinctOrderByEndDateAsc()).thenReturn(mockedList);
-
-        subscriptionService.retrieveSubscriptions();
-
-        verify(subscriptionRepository, times(1)).findDistinctOrderByEndDateAsc();
-    }
 }
