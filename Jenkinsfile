@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        //registryCredentials = "nexus1"
-        //registry = "192.168.1.100:8083"
-        //imageName = "kenzabenslimane_4twin3_thunder_gestionski"
-        //imageTag = "6.0-SNAPSHOT-${env.BUILD_NUMBER}"
+        registryCredentials = "nexus"
+        registry = "172.17.0.4:8082"
+        imageName = "HelmiSubscription"
+        imageTag = "6.0-SNAPSHOT-${env.BUILD_NUMBER}"
         gitBranch = "feat/subscription"
         gitRepo = "https://github.com/YassineEssid/ProjetDevops.git"
 
@@ -69,43 +69,6 @@ pipeline {
             }
         }
 
-/*         stage('Deploy to Nexus') {
-            steps {
-                dir('ProjetDevops') {
-                    sh 'mvn deploy'
-                }
-            }
-        } */
-
-        /*
-        stage('SonarQube Analysis') {
-            steps {
-                dir('ProjetDevops') {
-                    withSonarQubeEnv('sonarqube') {
-                        withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
-                          sh '''
-                          mvn sonar:sonar \
-                          -Dsonar.token=$SONAR_TOKEN \
-                          -Dsonar.projectKey=ProjetDevops \
-                          -Dsonar.projectName=ProjetDevops \
-                          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
-                          -Dsonar.java.coveragePlugin=jacoco
-                          '''
-                        }
-                    }
-                }
-            }
-        }*/
-
-
-
-        /*
-        stage('Build Docker Image') {
-            steps {
-                sh "DOCKER_BUILDKIT=1 docker build -t $registry/$imageName:$imageTag ."
-            }
-        }
-
         stage('Push to Nexus') {
             steps {
                 script {
@@ -115,6 +78,14 @@ pipeline {
                 }
             }
         }
+
+        /*
+        stage('Build Docker Image') {
+            steps {
+                sh "DOCKER_BUILDKIT=1 docker build -t $registry/$imageName:$imageTag ."
+            }
+        }
+
 
         stage('Run Application') {
             steps {
