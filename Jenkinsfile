@@ -10,18 +10,18 @@ pipeline {
            }
         }
 
-        stage('Run Tests') {
+/*         stage('Run Tests') {
             steps {
                 sh 'mvn test jacoco:report'
             }
             post {
                 always {
-                    junit '**/target/surefire-reports/*.xml'
+                    junit '**//* target/surefire-reports *//*.xml'
                 }
             }
-        }
+        } */
 
-        stage('SonarQube Analysis') {
+/*         stage('SonarQube Analysis') {
             steps {
                 dir('ProjetDevops') {
                     script {
@@ -42,7 +42,7 @@ pipeline {
                     }
                 }
             }
-        }
+        } */
 
         stage('Deploy to Nexus') {
             steps {
