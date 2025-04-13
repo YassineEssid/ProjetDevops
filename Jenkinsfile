@@ -63,9 +63,9 @@ pipeline {
              }
          }
 
-        stage('Package') {
+        stage('Build Docker Image') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                sh "DOCKER_BUILDKIT=1 docker build -t $registry/$imageName:$imageTag ."
             }
         }
 
@@ -79,14 +79,10 @@ pipeline {
             }
         }
 
-        /*
-        stage('Build Docker Image') {
-            steps {
-                sh "DOCKER_BUILDKIT=1 docker build -t $registry/$imageName:$imageTag ."
-            }
-        }
 
 
+
+/*
         stage('Run Application') {
             steps {
                 script {
