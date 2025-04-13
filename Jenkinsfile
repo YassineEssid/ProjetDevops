@@ -43,12 +43,9 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps{
-                script {
-                    def scannerHome = tool 'helmi123'
-                    withSonarQubeEnv {
-                    sh "${scannerHome}/bin/sonar-scanner"
-                    }
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh 'mvn sonar:sonar'
                 }
             }
         }
