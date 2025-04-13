@@ -2,10 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski'
+        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski:'
         DOCKER_USERNAME = 'admin' // Jenkins credentials for Docker username
         DOCKER_PASSWORD = 'nexus'  // Jenkins credentials for Docker password
-
     }
 
     stages {
@@ -18,6 +17,8 @@ pipeline {
             }
         }
 
+
+
             // 5. Build Docker Image
             stage('Build Docker Image') {
                 steps {
@@ -27,7 +28,7 @@ pipeline {
                         echo "Checking Docker images..."
                         sh 'docker images'
                         echo "Building Docker image..."
-                    }
+                        sh 'docker build -t youssefbelhadj/4twin3-gestion-station-ski .'                }
                 }
         }
         stage('Authenticate to Nexus Docker Registry') {
@@ -39,16 +40,7 @@ pipeline {
             }
         }
 
-        // 6. Push Docker Image Nexus
-        stage('Push Docker Image to Nexus') {
-            steps {
-                script {
-                    docker.withRegistry('http://192.168.33.10:8081', 'nexus-creds') {
-                        docker.image("${DOCKER_IMAGE}").push("latest")
-                    }
-                }
-            }
-        }
+
 
 
 }
