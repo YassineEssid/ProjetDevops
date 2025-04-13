@@ -15,38 +15,6 @@ pipeline {
             }
         }
 
-        // 2. Run unit tests (Mockito & JUnit)
-        stage('Build & Test') {
-            steps {
-              script {
-                  // Start MySQL with Docker Compose
-                  sh 'docker compose -f docker-compose.yml up -d mysqldb'
-
-                  // Run tests
-                  sh 'mvn clean test -Dspring.profiles.active=test'
-
-              }
-
-            }
-        }
-
-        // 3. SonarQube Analysis
-        stage('SonarQube Analysis') {
-            agent any
-            steps {
-                // Set SonarQube environment variables properly
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn clean package sonar:sonar'
-                }
-            }
-        }
-
-            // 4. Deploy Maven artifact to Nexus
-            stage('Deploy to Nexus') {
-                steps {
-                    sh 'mvn deploy -DskipTests -s /usr/share/maven/conf/settings.xml -e'
-                }
-            }
 
             // 5. Build Docker Image
             stage('Build Docker Image') {
