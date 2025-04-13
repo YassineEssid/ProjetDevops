@@ -10,8 +10,6 @@ pipeline {
         gitRepo = "https://github.com/YassineEssid/ProjetDevops.git"
         SONARQUBE_SERVER = 'SonarQube'
 
-
-
         // SonarQube
         /*
         SONAR_URL = "http://192.168.1.100:9000"
@@ -29,65 +27,67 @@ pipeline {
                 }
             }
         }
-                stage('Build') {
-                    steps {
-                        sh 'mvn clean compile jacoco:prepare-agent'
-                    }
-                }
+        stage('Build') {
+            steps {
+                sh 'mvn clean compile jacoco:prepare-agent'
+            }
+        }
 
-                stage('Run Tests') {
-                    steps {
-                        sh 'mvn test jacoco:report'
-                    }
-                    post {
-                        always {
-                            junit '**/target/surefire-reports/*.xml'
-                        }
-                    }
+        stage('Run Tests') {
+            steps {
+                sh 'mvn test jacoco:report'
+            }
+            post {
+                always {
+                    junit '**/target/surefire-reports/*.xml'
                 }
+            }
+        }
+
+
 /*
         stage('Build & Test') {
             steps {
                 sh 'mvn verify -Dspring.profiles.active=test -T 1C'
             }
-        }
-        */
+        }*/
+
 
         stage('Publish JaCoCo Report') {
-                    steps {
-                        jacoco(
-                            execPattern: 'target/jacoco.exec',
-                            classPattern: 'target/classes',
-                            sourcePattern: 'src/main/java',
-                            exclusionPattern: '**/test/**'
-                        )
-                    }
-                }
+            steps {
+                jacoco(
+                    execPattern: 'target/jacoco.exec',
+                    classPattern: 'target/classes',
+                    sourcePattern: 'src/main/java',
+                    exclusionPattern: '**/test/**'
+                )
+            }
+        }
 
-                stage('SonarQube Analysis') {
-                    steps {
-                        script {
-                            def scannerHome = tool 'scanner'
-                            withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                                sh """
-                                    ${scannerHome}/bin/sonar-scanner \\
-                                    -Dsonar.projectKey=gestion-station-ski \\
-                                    -Dsonar.sources=src/main/java \\
-                                    -Dsonar.tests=src/test/java \\
-                                    -Dsonar.java.binaries=target/classes \\
-                                    -Dsonar.junit.reportsPath=target/surefire-reports \\
-                                    -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-                                """
-                            }
-                        }
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'scanner'
+                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \\
+                            -Dsonar.projectKey=gestion-station-ski \\
+                            -Dsonar.sources=src/main/java \\
+                            -Dsonar.tests=src/test/java \\
+                            -Dsonar.java.binaries=target/classes \\
+                            -Dsonar.junit.reportsPath=target/surefire-reports \\
+                            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+                        """
                     }
                 }
+            }
+        }
 
-                stage('Package') {
-                    steps {
-                        sh 'mvn clean package -DskipTests'
-                    }
-                }
+        stage('Package') {
+            steps {
+                sh 'mvn clean package -DskipTests'
+            }
+        }
 
         /* stage('SonarQube Analysis') {
                     steps {
