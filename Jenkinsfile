@@ -38,7 +38,7 @@ pipeline {
             steps {
                 script {
                     echo "Logging into Nexus registry..."
-                    sh "echo ${DOCKER_PASS} | docker login ${REGISTRY} -u ${DOCKER_USER} --password-stdin"
+                    sh "echo ${DOCKER_PASS} | docker login http://${REGISTRY} -u ${DOCKER_USER} --password-stdin"
 
                     echo "Pushing Docker image to Nexus..."
                     sh "docker push ${FULL_IMAGE}"
