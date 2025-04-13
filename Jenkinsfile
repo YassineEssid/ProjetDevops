@@ -78,12 +78,10 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                dir('ProjetDevops') {  // Exécute le build Docker dans le dossier avec le Dockerfile
-                    sh """
-                        docker build -t ${IMAGE_NAME}:${VERSION} .
-                        docker tag ${IMAGE_NAME}:${VERSION} ${IMAGE_NAME}:latest
-                    """
-                }
+                sh """
+                    docker build -t ${IMAGE_NAME}:${VERSION} .
+                    docker tag ${IMAGE_NAME}:${VERSION} ${IMAGE_NAME}:latest
+                """
             }
         }
 
@@ -98,14 +96,12 @@ pipeline {
 
         stage('Run Application') {
             steps {
-                dir('ProjetDevops') {  // Exécute docker-compose dans le dossier contenant docker-compose.yml
-                    script {
-                        sh """
-                            export IMAGE_TAG=${VERSION}
-                            docker-compose pull || true
-                            docker-compose up -d
-                        """
-                    }
+                script {
+                    sh """
+                        export IMAGE_TAG=${VERSION}
+                        docker-compose pull || true
+                        docker-compose up -d
+                    """
                 }
             }
         }
