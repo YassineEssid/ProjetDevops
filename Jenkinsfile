@@ -4,7 +4,7 @@ pipeline {
     environment {
         registryCredentials = "nexus"
         registry = "172.17.0.4:8082"
-        imageName = "HelmiSubscription"
+        imageName = "helmisubscription"
         imageTag = "6.0-SNAPSHOT-${env.BUILD_NUMBER}"
         gitBranch = "feat/subscription"
         gitRepo = "https://github.com/YassineEssid/ProjetDevops.git"
