@@ -35,7 +35,7 @@ pipeline {
         // 6. Push Docker Image Nexus
         stage('Push Docker Image to Nexus') {
            steps {
-                sh "docker tag ${IMAGE_NAME} ${NEXUS_URL}/${IMAGE_NAME}"
+                sh "docker push ${NEXUS_URL}/docker-hosted/${IMAGE_NAME}"
            }
         }
 
