@@ -5,7 +5,7 @@ pipeline {
         imageName = 'youssefbelhadj/4twin3-gestion-station-ski'
              registry= '192.168.33.10/:8083' // Replace with your Nexus Docker registry
              registryCredentials = 'nexus-creds'
-             dockerImage="
+             dockerImage
     }
 
     stages {
