@@ -62,7 +62,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 dir('ProjetDevops') {
-                    withSonarQubeEnv('helmi123') {
+                    withSonarQubeEnv('sonarqube') {
                         withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
                           sh '''
                           mvn sonar:sonar \
