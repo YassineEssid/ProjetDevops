@@ -8,7 +8,6 @@ pipeline {
         //imageTag = "6.0-SNAPSHOT-${env.BUILD_NUMBER}"
         gitBranch = "feat/subscription"
         gitRepo = "https://github.com/YassineEssid/ProjetDevops.git"
-        SONARQUBE_SERVER = 'SonarQube'
 
         // SonarQube
         /*
@@ -64,7 +63,7 @@ pipeline {
             steps {
                 dir('ProjetDevops') {
                     script {
-                        withSonarQubeEnv('sonarqube') {
+                        withSonarQubeEnv('helmi123') {
                             withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
                                 docker.image('maven:3.8.6-openjdk-17').inside {
                                     sh """
