@@ -41,17 +41,25 @@ pipeline {
             }
         }
 
-
-/*         stage('SonarQube Analysis') {
-            steps{
-                script {
-                    def scannerHome = tool 'helmi123'
-                    withSonarQubeEnv {
-                    sh "${scannerHome}/bin/sonar-scanner"
+        stage('SonarQube Analysis') {
+            steps {
+                dir('ProjetDevops') {
+                    withSonarQubeEnv('sonarqube') {
+                        withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
+                            sh '''
+                            mvn clean verify
+                            mvn sonar:sonar \
+                              -Dsonar.token=$SONAR_TOKEN \
+                              -Dsonar.projectKey=ProjetDevops \
+                              -Dsonar.projectName=ProjetDevops \
+                              -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml \
+                              -Dsonar.java.coveragePlugin=jacoco
+                            '''
+                        }
                     }
                 }
             }
-        } */
+        }
 
         stage('Package') {
             steps {
@@ -59,6 +67,7 @@ pipeline {
             }
         }
 
+        /*
         stage('SonarQube Analysis') {
             steps {
                 dir('ProjetDevops') {
@@ -76,7 +85,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
 
 /*
