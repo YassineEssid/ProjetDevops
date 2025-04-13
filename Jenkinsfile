@@ -42,13 +42,17 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    sh 'mvn sonar:sonar'
+
+/*         stage('SonarQube Analysis') {
+            steps{
+                script {
+                    def scannerHome = tool 'helmi123'
+                    withSonarQubeEnv {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                    }
                 }
             }
-        }
+        } */
 
         stage('Package') {
             steps {
@@ -56,28 +60,28 @@ pipeline {
             }
         }
 
-        /* stage('SonarQube Analysis') {
-                    steps {
-                        dir('ProjetDevops') {
-                            script {
-                                withSonarQubeEnv('sonarqube') {
-                                    withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
-                                        docker.image('maven:3.8.6-openjdk-17').inside {
-                                            sh """
-                                                mvn sonar:sonar \
-                                                -Dsonar.token=$SONAR_TOKEN \
-                                                -Dsonar.projectKey=ProjetDevops \
-                                                -Dsonar.projectName=ProjetDevops \
-                                                -Dsonar.coverage.jacoco.xmlReportPaths=${SONAR_XML_REPORT_PATH} \
-                                                -Dsonar.java.coveragePlugin=jacoco
-                                            """
-                                        }
-                                    }
+        stage('SonarQube Analysis') {
+            steps {
+                dir('ProjetDevops') {
+                    script {
+                        withSonarQubeEnv('sonarqube') {
+                            withCredentials([string(credentialsId: 'jenkins-sonar', variable: 'SONAR_TOKEN')]) {
+                                docker.image('maven:3.8.6-openjdk-17').inside {
+                                    sh """
+                                        mvn sonar:sonar \
+                                        -Dsonar.token=$SONAR_TOKEN \
+                                        -Dsonar.projectKey=ProjetDevops \
+                                        -Dsonar.projectName=ProjetDevops \
+                                        -Dsonar.coverage.jacoco.xmlReportPaths=${SONAR_XML_REPORT_PATH} \
+                                        -Dsonar.java.coveragePlugin=jacoco
+                                    """
                                 }
                             }
                         }
                     }
                 }
+            }
+        }
 
 
 /*
