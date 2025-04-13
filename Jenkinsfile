@@ -74,7 +74,6 @@ pipeline {
                           }
                       }
                   }
-              }
 
         stage('Automated Test') {
             steps {
