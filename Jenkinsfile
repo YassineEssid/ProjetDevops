@@ -43,19 +43,11 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
+            steps{
                 script {
-                    def scannerHome = tool 'scanner'
-                    withSonarQubeEnv("${SONARQUBE_SERVER}") {
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner \\
-                            -Dsonar.projectKey=gestion-station-ski \\
-                            -Dsonar.sources=src/main/java \\
-                            -Dsonar.tests=src/test/java \\
-                            -Dsonar.java.binaries=target/classes \\
-                            -Dsonar.junit.reportsPath=target/surefire-reports \\
-                            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-                        """
+                    def scannerHome = tool 'helmi123'
+                    withSonarQubeEnv {
+                    sh "${scannerHome}/bin/sonar-scanner"
                     }
                 }
             }
