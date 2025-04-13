@@ -5,6 +5,10 @@ pipeline {
         DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski'
       registryCredentials = "nexus-creds"
         registry = "192.168.33.10:8081/repository/docker-hosted/"
+                DOCKERHUB_CREDENTIALS = credentials('docker-creds')
+                        DOCKER_USERNAME = "youssefbelhadj"
+
+
     }
 
     stages {
@@ -31,15 +35,23 @@ pipeline {
                         sh 'docker build -t youssefbelhadj/4twin3-gestion-station-ski .'                }
                 }
         }
-          stage('Push to Nexus') {
-                  steps {
-                      script {
-                          docker.withRegistry("http://${registry}", registryCredentials) {
-                              sh "docker push --quiet $registry/$DOCKER_IMAGE"
-                          }
-                      }
-                  }
-              }
+           stage('Docker Login') {
+                       steps {
+                           script {
+                               sh """
+                                   echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
+                               """
+                           }
+                       }
+                   }
+          stage('Push to Docker Hub') {
+                     steps {
+                         sh """
+                             docker push ${DOCKER_IMAGE}:
+                             docker push ${DOCKER_IMAGE}:latest
+                         """
+                     }
+                 }
 
 
 }
