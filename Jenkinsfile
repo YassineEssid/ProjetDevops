@@ -27,42 +27,33 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Build') {
             steps {
                 sh 'mvn clean compile jacoco:prepare-agent'
             }
+        }*/
+        stage('Build') {
+           steps {
+               dir('ProjetDevops') {  // Exécute la commande Maven dans le bon dossier
+                   sh 'mvn clean compile'
+               }
+           }
         }
 
         stage('Run Tests') {
-            steps {
-                sh 'mvn test jacoco:report'
-            }
-            post {
-                always {
-                    junit '**/target/surefire-reports/*.xml'
-                }
-            }
+           steps {
+               dir('ProjetDevops') {
+                   sh 'mvn test -Dspring.profiles.active=test'
+               }
+           }
         }
-
-
 /*
         stage('Build & Test') {
             steps {
                 sh 'mvn verify -Dspring.profiles.active=test -T 1C'
             }
         }*/
-
-
-        stage('Publish JaCoCo Report') {
-            steps {
-                jacoco(
-                    execPattern: 'target/jacoco.exec',
-                    classPattern: 'target/classes',
-                    sourcePattern: 'src/main/java',
-                    exclusionPattern: '**/test/**'
-                )
-            }
-        }
 
         stage('SonarQube Analysis') {
             steps {
