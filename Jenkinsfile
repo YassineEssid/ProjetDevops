@@ -2,10 +2,10 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'youssefbelhadj/4twin3-gestion-station-ski'
-             IMAGE_TAG = 'latest'
-             REGISTRY_URL = '192.168.33.10/:8083' // Replace with your Nexus Docker registry
-             DOCKER_CREDS = 'nexus-creds'
+        imageName = 'youssefbelhadj/4twin3-gestion-station-ski'
+             registry= '192.168.33.10/:8083' // Replace with your Nexus Docker registry
+             registryCredentials = 'nexus-creds'
+             dockerImage="
     }
 
     stages {
@@ -22,7 +22,7 @@ pipeline {
        stage('Build Docker Image') {
                    steps {
                        script {
-                           dockerImage = docker.build youssefbelhadj/4twin3-gestion-station-ski
+                           dockerImage = docker.build imageName
                        }
                    }
                }
@@ -30,8 +30,8 @@ pipeline {
                stage('Push to Nexus') {
                    steps {
                        script {
-                           docker.withRegistry("http//${REGISTRY_URL}", "${DOCKER_CREDS}") {
-                               dockerImage.push()
+                           docker.withRegistry("http//"+registry, registryCredentials) {
+                               dockerImage.push('latest')
                            }
                        }
                    }
