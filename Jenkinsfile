@@ -20,8 +20,8 @@ pipeline {
         SONAR_PROJECT_NAME = "subscription"
 
         // Email Configuration
-        EMAIL_RECIPIENTS = "pi.parkit@gmail.com"
-        EMAIL_SENDER = "pi.parkit@gmail.com"
+        //EMAIL_RECIPIENTS = "helmi.gargouri1@gmail.com"
+        //EMAIL_SENDER = "pi.parkit@gmail.com"
     }
 
     stages {
@@ -126,7 +126,7 @@ pipeline {
             }
         }
     }
-/*
+
     post {
         success {
             echo "✅ Pipeline completed successfully!"
@@ -141,9 +141,9 @@ pipeline {
                 sh 'docker-compose -f docker-compose.yml -p ProjetDevops down || true'
             }
         }
-    }*/
+    }
 
-
+/*
     post {
         success {
             echo "✅ Pipeline completed successfully!"
@@ -203,7 +203,7 @@ pipeline {
                 attachLog: true
             )
         }
-    }
+    }*/
 }
 
 
