@@ -20,8 +20,8 @@ pipeline {
         SONAR_PROJECT_NAME = "subscription"
 
         // Email Configuration
-        EMAIL_RECIPIENTS = "helmi.gargouri1@gmail.com"
-        EMAIL_SENDER = "pi.parkit@gmail.com"
+        //EMAIL_RECIPIENTS = "helmi.gargouri1@gmail.com"
+        //EMAIL_SENDER = "pi.parkit@gmail.com"
     }
 
     stages {
@@ -130,6 +130,22 @@ pipeline {
     post {
         success {
             echo "✅ Pipeline completed successfully!"
+            echo "Pipeline succeeded! Containers are still running for testing."
+            mail to: 'helmi.gargouri@gmail.com',
+                 subject: "Succès du Pipeline ProjetDevopsss #${env.BUILD_NUMBER}",
+                 body: "Le pipeline s'est terminé avec succès ! Vérifie les détails ici : ${env.BUILD_URL}"
+        }
+        failure {
+            dir('kaddem') {
+                sh 'docker-compose -f docker-compose.yml -p ProjetDevops down || true'
+            }
+        }
+    }
+
+/*
+    post {
+        success {
+            echo "✅ Pipeline completed successfully!"
             emailext(
                 subject: "✅ [JENKINS] Build #${BUILD_NUMBER} - ${currentBuild.currentResult} - ${env.JOB_NAME}",
                 body: """
@@ -186,7 +202,7 @@ pipeline {
                 attachLog: true
             )
         }
-    }
+    }*/
 }
 
 
