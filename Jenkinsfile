@@ -135,7 +135,7 @@ pipeline {
 
                     echo "Retrieving the added element..."
                     def getResponse = sh(script: '''
-                        curl http://192.168.33.10:8089/api/skier/get/3
+                        curl http://192.168.33.10:8089/api/skier/get/4
                     ''', returnStdout: true).trim()
 
                     echo "GET Response: ${getResponse}"
