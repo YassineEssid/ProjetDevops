@@ -137,7 +137,6 @@ pipeline {
                 <body>
                     <h2>✅ Build Successful: ${env.JOB_NAME}</h2>
                     <p>Build #${BUILD_NUMBER} completed successfully!</p>
-
                     <h3>Build Information:</h3>
                     <ul>
                         <li>Status: ${currentBuild.currentResult}</li>
@@ -147,19 +146,18 @@ pipeline {
                         <li>Build URL: ${BUILD_URL}</li>
                         <li>Duration: ${currentBuild.durationString}</li>
                     </ul>
-
                     <p>Check the console output for more details: <a href="${BUILD_URL}console">Console Output</a></p>
-
                     <p>Regards,<br>Jenkins CI/CD System</p>
                 </body>
                 </html>
                 """,
-                to: "${EMAIL_RECIPIENTS}",
-                from: "${EMAIL_SENDER}",
+                to: EMAIL_RECIPIENTS,
+                from: EMAIL_SENDER,
                 mimeType: 'text/html',
                 attachLog: true
             )
         }
+
         failure {
             echo "❌ Pipeline failed! Check the logs."
             emailext(
@@ -169,7 +167,6 @@ pipeline {
                 <body>
                     <h2>❌ Build Failed: ${env.JOB_NAME}</h2>
                     <p>Build #${BUILD_NUMBER} has failed!</p>
-
                     <h3>Build Information:</h3>
                     <ul>
                         <li>Status: ${currentBuild.currentResult}</li>
@@ -178,15 +175,13 @@ pipeline {
                         <li>Build URL: ${BUILD_URL}</li>
                         <li>Duration: ${currentBuild.durationString}</li>
                     </ul>
-
                     <p>Please check the console output for error details: <a href="${BUILD_URL}console">Console Output</a></p>
-
                     <p>Regards,<br>Jenkins CI/CD System</p>
                 </body>
                 </html>
                 """,
-                to: "${EMAIL_RECIPIENTS}",
-                from: "${EMAIL_SENDER}",
+                to: EMAIL_RECIPIENTS,
+                from: EMAIL_SENDER,
                 mimeType: 'text/html',
                 attachLog: true
             )
