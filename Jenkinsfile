@@ -131,11 +131,12 @@ pipeline {
         success {
             echo "✅ Pipeline completed successfully!"
             echo "Pipeline succeeded! Containers are still running for testing."
-            mail to: 'helmi.gargouri@gmail.com',
+            mail to: 'pi.parkit@gmail.com',
                  subject: "Succès du Pipeline ProjetDevopsss #${env.BUILD_NUMBER}",
                  body: "Le pipeline s'est terminé avec succès ! Vérifie les détails ici : ${env.BUILD_URL}"
         }
         failure {
+            echo "❌ Pipeline failed! Check the logs."
             dir('ProjetDevops') {
                 sh 'docker-compose -f docker-compose.yml -p ProjetDevops down || true'
             }
