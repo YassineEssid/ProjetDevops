@@ -129,60 +129,6 @@ pipeline {
 
     post {
         success {
-            echo "✅ Build successful!"
-            emailext(
-                subject: "✅ [JENKINS] Build #${BUILD_NUMBER} - ${currentBuild.currentResult} - ${env.JOB_NAME}",
-                body: """
-                    <html>
-                    <body>
-                        <h2>✅ Build Successful: ${env.JOB_NAME}</h2>
-                        <p>Build #${BUILD_NUMBER} completed successfully!</p>
-                        <ul>
-                            <li>Tag: ${dockerHubRepo}:${imageTag}</li>
-                            <li>Build URL: <a href="${BUILD_URL}">${BUILD_URL}</a></li>
-                            <li>Duration: ${currentBuild.durationString}</li>
-                        </ul>
-                    </body>
-                    </html>
-                """,
-                to: "${EMAIL_RECIPIENTS}",
-                from: "${EMAIL_SENDER}",
-                mimeType: 'text/html',
-                attachLog: true
-            )
-        }
-
-        failure {
-            echo "❌ Build failed!"
-            emailext(
-                subject: "❌ [JENKINS] Build #${BUILD_NUMBER} - ${currentBuild.currentResult} - ${env.JOB_NAME}",
-                body: """
-                    <html>
-                    <body>
-                        <h2>❌ Build Failed: ${env.JOB_NAME}</h2>
-                        <p>Build #${BUILD_NUMBER} has failed!</p>
-                        <ul>
-                            <li>Tag: ${dockerHubRepo}:${imageTag}</li>
-                            <li>Build URL: <a href="${BUILD_URL}">${BUILD_URL}</a></li>
-                            <li>Duration: ${currentBuild.durationString}</li>
-                        </ul>
-                    </body>
-                    </html>
-                """,
-                to: "${EMAIL_RECIPIENTS}",
-                from: "${EMAIL_SENDER}",
-                mimeType: 'text/html',
-                attachLog: true
-            )
-        }
-    }
-
-
-
-
-/*
-    post {
-        success {
             echo "✅ Pipeline completed successfully!"
             emailext(
                 subject: "✅ [JENKINS] Build #${BUILD_NUMBER} - ${currentBuild.currentResult} - ${env.JOB_NAME}",
@@ -240,7 +186,7 @@ pipeline {
                 attachLog: true
             )
         }
-    }*/
+    }
 }
 
 
