@@ -126,6 +126,7 @@ pipeline {
             }
         }
     }
+
     post {
         success {
             echo "✅ Pipeline completed successfully!"
@@ -142,7 +143,7 @@ pipeline {
                         <li>Status: ${currentBuild.currentResult}</li>
                         <li>Job: ${env.JOB_NAME}</li>
                         <li>Branch: ${gitBranch}</li>
-                        <li>Image Tag: ${registry}/${imageName}:${imageTag}</li>
+                        <li>Image Tag: ${IMAGE_NAME}:${VERSION}</li>
                         <li>Build URL: ${BUILD_URL}</li>
                         <li>Duration: ${currentBuild.durationString}</li>
                     </ul>
@@ -191,6 +192,10 @@ pipeline {
             )
         }
     }
+}
+
+
+
 /*
     post {
         success {
@@ -200,4 +205,3 @@ pipeline {
             echo "❌ Pipeline failed! Check the logs."
         }
     }*/
-}
