@@ -112,7 +112,7 @@ pipeline {
             steps {
                 script {
                     echo "Waiting for the app to start..."
-                    sleep 20
+                    sleep 60
                     echo "Adding a new skier..."
                     def postResponse = sh(script: '''
                         curl -X POST http://192.168.33.10:8089/api/skier/add \
