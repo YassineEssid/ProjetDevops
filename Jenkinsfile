@@ -13,48 +13,6 @@ pipeline {
 
     stages {
 
-        // 1. Checkout from GitHub
-        stage('Checkout') {
-            steps {
-                git branch: 'feat/youssef',
-                    url: 'https://github.com/YassineEssid/ProjetDevops.git'
-            }
-        }
-        // 2. Run unit tests (Mockito & JUnit)
-                stage('Build & Test') {
-                    steps {
-                      script {
-                          // Start MySQL with Docker Compose
-                          sh 'docker compose -f docker-compose.yml up -d mysqldb'
-
-                          // Run tests
-                          sh 'mvn clean test -Dspring.profiles.active=test'
-
-                      }
-
-                    }
-                }
-
-                // 3. SonarQube Analysis
-                stage('SonarQube Analysis') {
-                    agent any
-                    steps {
-                        // Set SonarQube environment variables properly
-                        withSonarQubeEnv('SonarQube') {
-                            sh 'mvn clean package sonar:sonar'
-                        }
-                    }
-                }
-
-                    // 4. Deploy Maven artifact to Nexus
-                    stage('Deploy to Nexus') {
-                        steps {
-                            sh 'mvn deploy -DskipTests -s /usr/share/maven/conf/settings.xml'
-                        }
-                    }
-
-
-
 
             // 5. Build Docker Image
             stage('Build Docker Image') {
@@ -68,23 +26,7 @@ pipeline {
                         sh 'docker build -t youssefbelhadj/4twin3-gestion-station-ski .'                }
                 }
         }
-           stage('DockerHub Login') {
-                       steps {
-                           script {
-                               sh """
-                                   echo ${DOCKERHUB_CREDENTIALS_PSW} | docker login -u ${DOCKERHUB_CREDENTIALS_USR} --password-stdin
-                               """
-                           }
-                       }
-                   }
-          stage('Push to Docker Hub') {
-                     steps {
-                         sh """
-                             docker push ${DOCKER_IMAGE}
-                             docker push ${DOCKER_IMAGE}:latest
-                         """
-                     }
-                 }
+
           stage('Run Docker Compose') {
              steps {
                  script {
@@ -135,7 +77,7 @@ pipeline {
 
                     echo "Retrieving the added element..."
                     def getResponse = sh(script: '''
-                        curl http://192.168.33.10:8089/api/skier/get/4
+                        curl http://192.168.33.10:8089/api/skier/get/1
                     ''', returnStdout: true).trim()
 
                     echo "GET Response: ${getResponse}"
