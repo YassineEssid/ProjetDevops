@@ -18,6 +18,10 @@ pipeline {
         SONAR_TOKEN = "squ_af142814424e203d67bb97741a4c3b47adc0cd50"
         SONAR_PROJECT_KEY = "subscription"
         SONAR_PROJECT_NAME = "subscription"
+
+        // Email Configuration
+        EMAIL_RECIPIENTS = "helmi.gargouri1@gmail.com"
+        EMAIL_SENDER = "pi.parkit@gmail.com"
     }
 
     stages {
@@ -122,7 +126,72 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            echo "✅ Pipeline completed successfully!"
+            emailext(
+                subject: "✅ [JENKINS] Build #${BUILD_NUMBER} - ${currentBuild.currentResult} - ${env.JOB_NAME}",
+                body: """
+                <html>
+                <body>
+                    <h2>✅ Build Successful: ${env.JOB_NAME}</h2>
+                    <p>Build #${BUILD_NUMBER} completed successfully!</p>
 
+                    <h3>Build Information:</h3>
+                    <ul>
+                        <li>Status: ${currentBuild.currentResult}</li>
+                        <li>Job: ${env.JOB_NAME}</li>
+                        <li>Branch: ${gitBranch}</li>
+                        <li>Image Tag: ${registry}/${imageName}:${imageTag}</li>
+                        <li>Build URL: ${BUILD_URL}</li>
+                        <li>Duration: ${currentBuild.durationString}</li>
+                    </ul>
+
+                    <p>Check the console output for more details: <a href="${BUILD_URL}console">Console Output</a></p>
+
+                    <p>Regards,<br>Jenkins CI/CD System</p>
+                </body>
+                </html>
+                """,
+                to: "${EMAIL_RECIPIENTS}",
+                from: "${EMAIL_SENDER}",
+                mimeType: 'text/html',
+                attachLog: true
+            )
+        }
+        failure {
+            echo "❌ Pipeline failed! Check the logs."
+            emailext(
+                subject: "❌ [JENKINS] Build #${BUILD_NUMBER} - ${currentBuild.currentResult} - ${env.JOB_NAME}",
+                body: """
+                <html>
+                <body>
+                    <h2>❌ Build Failed: ${env.JOB_NAME}</h2>
+                    <p>Build #${BUILD_NUMBER} has failed!</p>
+
+                    <h3>Build Information:</h3>
+                    <ul>
+                        <li>Status: ${currentBuild.currentResult}</li>
+                        <li>Job: ${env.JOB_NAME}</li>
+                        <li>Branch: ${gitBranch}</li>
+                        <li>Build URL: ${BUILD_URL}</li>
+                        <li>Duration: ${currentBuild.durationString}</li>
+                    </ul>
+
+                    <p>Please check the console output for error details: <a href="${BUILD_URL}console">Console Output</a></p>
+
+                    <p>Regards,<br>Jenkins CI/CD System</p>
+                </body>
+                </html>
+                """,
+                to: "${EMAIL_RECIPIENTS}",
+                from: "${EMAIL_SENDER}",
+                mimeType: 'text/html',
+                attachLog: true
+            )
+        }
+    }
+/*
     post {
         success {
             echo "✅ Pipeline completed successfully!"
@@ -130,5 +199,5 @@ pipeline {
         failure {
             echo "❌ Pipeline failed! Check the logs."
         }
-    }
+    }*/
 }
