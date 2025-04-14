@@ -136,7 +136,7 @@ pipeline {
                  body: "Le pipeline s'est terminé avec succès ! Vérifie les détails ici : ${env.BUILD_URL}"
         }
         failure {
-            dir('kaddem') {
+            dir('ProjetDevops') {
                 sh 'docker-compose -f docker-compose.yml -p ProjetDevops down || true'
             }
         }
